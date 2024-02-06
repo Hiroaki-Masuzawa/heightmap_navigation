@@ -249,10 +249,10 @@ class makePath:
         self.costmap_pub = rospy.Publisher('costmap', OccupancyGrid, queue_size=1)
         
         # subscriberの登録
-        self.map_sub = rospy.Subscriber("height_map", HeightMap, self.map_callback)
-        self.pos_sub = rospy.Subscriber("/move_base_simple/goal", PoseStamped, self.pose_callback)
+        self.map_sub = rospy.Subscriber("height_map", HeightMap, self.callback_map)
+        self.pos_sub = rospy.Subscriber("/move_base_simple/goal", PoseStamped, self.callback_pose)
 
-    def map_callback(self, map_msg):
+    def callback_map(self, map_msg):
         raw_map_data = self.bridge.imgmsg_to_cv2(map_msg.map, desired_encoding='passthrough')
         binarymap = np.ones_like(raw_map_data, dtype=np.uint8)
         binarymap[raw_map_data>=self.max_height] = 0
@@ -282,7 +282,7 @@ class makePath:
         self.searchpath.setResolution(map_msg.resolution_x, map_msg.resolution_y)
         self.map_exist = True
 
-    def pose_callback(self, goal_pose):
+    def callback_pose(self, goal_pose):
         if not self.map_exist:
             print("map is not recieved yet")
             return 
