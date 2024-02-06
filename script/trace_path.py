@@ -19,7 +19,7 @@ class TracePath:
         self.pos_route = []
         self.robot_frame_id = rospy.get_param('~robot_frame', 'real/base_link')
         self.map_frame_id = rospy.get_param('~map_frame', 'robot_map')
-        self.goal_th = 0.2
+        self.goal_th = rospy.get_param('~goal_th', 0.2)
         
         # tflistener
         self.tfBuffer = tf2_ros.Buffer()
