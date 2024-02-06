@@ -232,8 +232,8 @@ class makePath:
         # heightmapからgridmapを生成するパラメタ
         self.min_height = rospy.get_param('~min_height', -0.02)
         self.max_height = rospy.get_param('~max_height', 0.02)
-        self.robot_frame_id = rospy.get_param('~robot_frame', 'base_link')
-        self.map_frame_id = rospy.get_param('~map_frame', 'map')
+        self.robot_frame_id = rospy.get_param('~robot_frame', 'real/base_link')
+        self.map_frame_id = rospy.get_param('~map_frame', 'robot_map')
         self.bridge = CvBridge()
         self.map = GridMap()
         self.map_exist = False
@@ -258,7 +258,7 @@ class makePath:
         binarymap[raw_map_data>=self.max_height] = 0
         binarymap[raw_map_data<=self.min_height] = 0
         dist_from_obj = cv2.distanceTransform(binarymap, cv2.DIST_L2, 5)
-        inflation = 10
+        inflation = 5 #10
         k_cost = 20
         costmap = np.clip(np.exp(-k_cost*np.clip((dist_from_obj-inflation), 0, 1e5)), 0, 1)*100
 
@@ -286,7 +286,7 @@ class makePath:
         if not self.map_exist:
             print("map is not recieved yet")
             return 
-
+        rospy.sleep(0.1)
         try:
             t = self.tfBuffer.lookup_transform(self.map_frame_id , self.robot_frame_id, goal_pose.header.stamp)
         except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException) as e:

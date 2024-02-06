@@ -5,7 +5,7 @@
     <!-- <node name="heightmap2occupancygrid" pkg="heightmap_navigation" type="height2occupancygrid.py">
 
     </node> -->
-    <node name="rviz" pkg="rviz" type="rviz"
+    <node name="rviz_panel" pkg="rviz" type="rviz"
         args="-d $(find heightmap_navigation)/rviz/heightmap.rviz">
 
     </node>
