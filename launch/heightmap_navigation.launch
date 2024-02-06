@@ -1,0 +1,26 @@
+<launch>
+    <arg name="robot_frame" default="base_link" />
+    <arg name="map_frame" default="map" />
+
+    <node name="heightmap_visualizer" pkg="heightmap_navigation" type="heightmap_visualizer.py">
+
+    </node>
+    <!-- <node name="heightmap2occupancygrid" pkg="heightmap_navigation"
+    type="height2occupancygrid.py">
+
+    </node> -->
+    <node name="makepath" pkg="heightmap_navigation" type="makepath.py">
+        <param name="min_height" value="-0.02" />
+        <param name="max_height" value="0.02" />
+        <param name="robot_frame" value="$(arg robot_frame)" />
+        <param name="map_frame" value="$(arg map_frame)" />
+    </node>
+    <node name="trace_path" pkg="heightmap_navigation" type="trace_path.py">
+        <param name="robot_frame" value="$(arg robot_frame)" />
+        <param name="map_frame" value="$(arg map_frame)" />
+    </node>
+    <node name="rviz_heightmap_navigation" pkg="rviz" type="rviz"
+        args="-d $(find heightmap_navigation)/rviz/heightmap.rviz">
+    </node>
+
+</launch>
